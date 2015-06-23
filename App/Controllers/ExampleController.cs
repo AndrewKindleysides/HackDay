@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using System.Web;
 using System.Web.Http;
 using App.Models;
 using Newtonsoft.Json.Linq;
@@ -11,25 +12,21 @@ namespace App.Controllers
     {
         private readonly Repo repository = WebApiApplication.repository;
         
-        [Route("Members"), HttpGet]
-        public object AllMembers()
+        [Route("move"), HttpGet]
+        public string AllMembers()
         {
-            return repository.AllMembers();
+            return "ROCK";
         }
 
-        [Route("Member/{name}"), HttpGet]
-        public object AllMembers(string name)
+        [Route("start"), HttpPost]
+        public HttpStatusCode Start([FromBody]JObject json)
         {
-            return repository.AllMembers().Where(e => e.Name == name);
+            return HttpStatusCode.OK;
         }
 
-        [Route("Member"), HttpPost]
-        public HttpStatusCode AddNewMember([FromBody]JObject json)
+        [Route("move"), HttpPost]
+        public HttpStatusCode Move([FromBody]JObject json)
         {
-            var members = repository.AllMembers();
-            if (members.Any(e => e.Name == json["Name"].Value<string>()))
-                return HttpStatusCode.Found;
-            members.Add(new Member() {Name = json["Name"].Value<string>(), Age = json["Age"].Value<int>() });
             return HttpStatusCode.OK;
         }
     }
